@@ -5,34 +5,34 @@ from collections import Counter
 def score_string(text):
     # Define the 7 most common characters in English
     common_characters = ['E', 'T', 'A', 'O', 'I', 'N', 'S', 'H', 'R', 'D']
-    
+
     # Initialize score
     score = 0
-    
+
     # Count occurrences of each common character
     char_count = {char: text.upper().count(char) for char in common_characters}
-    
+
     # Sum up the scores based on occurrence
     score = sum(char_count[char] for char in common_characters)
-    
+
     return score
 
 def score_string_by_bigrams(text):
     # Define common letter pairs (bigrams) in English
     common_bigrams = ['TH', 'HE', 'AN', 'RE', 'ER', 'IN', 'ON', 'AT', 'ND', 'ST', 'ES', 'EN', 'OF', 'TE', 'ED', 'OR', 'TI', 'HI', 'AS', 'TO']
-    
+
     # Convert text to uppercase to standardize
     text = text.upper()
-    
+
     # Initialize score
     score = 0
-    
+
     # Count occurrences of each bigram
     bigram_counts = Counter(text[i:i+2] for i in range(len(text) - 1))
-    
+
     # Sum up the scores based on occurrence of common bigrams
     score = sum(bigram_counts[bigram] for bigram in common_bigrams)
-    
+
     return score
 
 # Decode the hex string
@@ -87,7 +87,7 @@ for first in guess_key[0]:
                 for fifth in guess_key[4]:
                     key = first + second + third + fourth + fifth
                     assumption = ""
-                    
+
                     for i in range(0,len(decoded)):
                         assumption += chr(ord(decoded[i]) ^ ord(key[i%len(key)]))
                     if (score_string(assumption) >= 20 and score_string_by_bigrams(assumption) >= 4):

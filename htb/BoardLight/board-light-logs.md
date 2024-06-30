@@ -1,8 +1,8 @@
-# BoardLight box
+# HTB - BoardLight box
 
 URL: https://app.hackthebox.com/machines/BoardLight
 
-## Reconaissance
+## Enumeration
 
 Target IP Address: `10.10.11.11`
 
