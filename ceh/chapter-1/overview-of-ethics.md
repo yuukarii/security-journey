@@ -8,4 +8,4 @@
 - As long as what you are being asked to do is not illegal and the scope of activities falls within systems run by the company you are working for, your work would be considered ethical.
 - If you stray outside of the scope of systems, networks, and services, your actions would be considered unethical.
 
-[Back to Chapter 1: Ethical Hacking](my-ceh-v12-notes.md#chapter%201%20ethical%20hacking)
+[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter%201%20ethical%20hacking)

@@ -34,4 +34,4 @@
 - **Impact**
 	- The types of activities that affects to the victims' system.
 
-[Back to Chapter 1: Ethical Hacking](my-ceh-v12-notes.md#chapter%201%20ethical%20hacking)
+[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter%201%20ethical%20hacking)

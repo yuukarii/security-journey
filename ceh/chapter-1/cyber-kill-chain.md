@@ -15,4 +15,4 @@
 - **Command & Control**: give attackers remote access to the infected system.
 - **Actions on Objective**: achieve the objectives.
 
-[Back to Chapter 1: Ethical Hacking](my-ceh-v12-notes.md#chapter%201%20ethical%20hacking)
+[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter%201%20ethical%20hacking)

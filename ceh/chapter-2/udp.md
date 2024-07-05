@@ -12,4 +12,4 @@
 - The PDU for UDP is datagram.
 - Real-time protocols are less concerned about the correct order -> use UDP.
 
-[Back to Chapter 2: Network Foundations](my-ceh-v12-notes.md#chapter%202%20network%20foundations)
+[Back to Chapter 2: Network Foundations](../ceh.md#chapter%202%20network%20foundations)
