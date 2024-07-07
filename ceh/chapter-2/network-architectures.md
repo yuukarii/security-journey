@@ -27,3 +27,5 @@
 - **VPNs** (Virtual private networks): a way to gain access to the internal network from remote locations.
 - **MPLS** (Multiprotocol Label Switching): provides what is essentially a tunnel from one location to another by encapsulating traffic inside a label.
 - **IPSec** (IP Security) is a set of extensions provide for encryption from one location to another.
+
+[Back to Chapter 2: Network Foundations](../ceh.md#chapter%202%20network%20foundations)
