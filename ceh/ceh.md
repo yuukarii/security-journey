@@ -25,7 +25,10 @@
 - [Internet Control Message Protocol (ICMP)](./chapter-2/icmp.md)
 - [Network Architectures](./chapter-2/network-architectures.md)
 - [Cloud Computing](./chapter-2/cloud-computing.md)
+- [Review Questions](./chapter-2/review-questions.md)
 
-[Back to Chapter 2: Network Foundations](../ceh.md#chapter%202%20network%20foundations)
+### Chapter 3: Security Foundations
+
+[Back to Chapter 3: Security Foundations](../ceh.md#chapter%203%20security%20foundations)
 
 [↑](#content)

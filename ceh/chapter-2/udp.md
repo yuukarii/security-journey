@@ -2,6 +2,11 @@
 
 - a much lighter‐weight protocol that offers no guarantee of delivery.
 - ![](./udp-headers.png)
+- Headers:
+	- Source *port*
+	- Destination *port*
+	- Checksum
+	- Length
 - Closed ports are not mentioned in UDP.
 - Working with UDP ports is entirely unreliable.
 - If you don't get a response:
