@@ -42,7 +42,7 @@ Current=sddm-flower-theme" | sudo tee /etc/sddm.conf
 
 Start i3 bằng command: `startx /usr/bin/i3`
 First look:
-![](Pasted%20image%2020240610082452.png)
+![](Pasted-image-20240610082452.png)
 Sẽ có nhiều thứ cần chỉnh sửa.
 Lúc khác làm tiếp.
 

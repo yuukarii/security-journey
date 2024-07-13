@@ -28,7 +28,14 @@
 - [Review Questions](./chapter-2/review-questions.md)
 
 ### Chapter 3: Security Foundations
+- The Triad
+- Information Assurance and Risk
+- Policies, Standards, and Procedures
+- Organizing Your Protections
+- Security Technology
+- Being Prepared
 
-[Back to Chapter 3: Security Foundations](../ceh.md#chapter%203%20security%20foundations)
+
+[Back to Chapter 3: Security Foundations](../ceh.md#chapter-3-security-foundations)
 
 [↑](#content)

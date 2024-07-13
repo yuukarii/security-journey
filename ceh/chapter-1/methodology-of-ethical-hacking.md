@@ -23,4 +23,4 @@
 - **Covering Tracks**
 	- Hide or delete any evidence to which you managed to get access. Additionally, cover up your continued access.
 
-[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter%201%20ethical%20hacking)
+[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter-1-ethical-hacking)

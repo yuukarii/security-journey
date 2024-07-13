@@ -12,4 +12,4 @@
 - **Maintain Presence**: keep the malware running so the attacker can keep getting back in when they want.
 - **Complete Mission**: the attacker doesn't just visit the victim's system in one time. There would be numerous times, to get data as much as possible.
 
-[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter%201%20ethical%20hacking)
+[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter-1-ethical-hacking)

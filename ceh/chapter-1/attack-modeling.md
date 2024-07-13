@@ -11,4 +11,4 @@
 	- [Attack Lifecycle](attack-lifecycle.md)
 	- [MITRE ATT&CK Framework](mitre-attack-framework.md)
 
-[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter%201%20ethical%20hacking)
+[Back to Chapter 1: Ethical Hacking](../ceh.md#chapter-1-ethical-hacking)

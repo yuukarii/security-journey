@@ -26,4 +26,4 @@
 - Any of devices that have embedded software and also have network access are considered to be part of the Internet of Things (IoT).
 
 
-[Back to Chapter 2: Network Foundations](../ceh.md#chapter%202%20network%20foundations)
+[Back to Chapter 2: Network Foundations](../ceh.md#chapter-2-network-foundations)

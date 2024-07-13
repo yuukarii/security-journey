@@ -10,4 +10,4 @@
 - Each layer of the network stack has a different term to refer to the chunk of data encapsulated by that layer.
 - These chunks are called *protocol data units* (PDUs).
 
-[Back to Chapter 2: Network Foundations](../ceh.md#chapter%202%20network%20foundations)
+[Back to Chapter 2: Network Foundations](../ceh.md#chapter-2-network-foundations)

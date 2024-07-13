@@ -25,10 +25,10 @@
 	- System are wired directly to one another.
     - ![mesh-network](./mesh-network-image.png)
 	- Peer-to-peer.
-	- Full mesh network: 
+	- Full mesh network:
         - ![Full mesh network](./full-mesh-network-image.png)
 		- It's complexity.
 - **Hybrid**:
 	- Common hybrid approach: star-bus.
 
-[Back to Chapter 2: Network Foundations](../ceh.md#chapter%202%20network%20foundations)
+[Back to Chapter 2: Network Foundations](../ceh.md#chapter-2-network-foundations)

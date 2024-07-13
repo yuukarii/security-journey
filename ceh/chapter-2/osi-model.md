@@ -34,4 +34,4 @@
 > [!warning]
 > Not always food fits when it comes to mapping protocol to the seven layers. Especially between the Session and Application layers.
 
-[Back to Chapter 2: Network Foundations](../ceh.md#chapter%202%20network%20foundations)
+[Back to Chapter 2: Network Foundations](../ceh.md#chapter-2-network-foundations)

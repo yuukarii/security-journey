@@ -62,4 +62,4 @@
 - The lowest possible address is used for the network.
 - The highest possible address is used for the broadcast address.
 
-[Back to Chapter 2: Network Foundations](../ceh.md#chapter%202%20network%20foundations)
+[Back to Chapter 2: Network Foundations](../ceh.md#chapter-2-network-foundations)
