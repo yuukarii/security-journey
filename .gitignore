@@ -1,2 +1,4 @@
 *.ovpn
 *venv
+*.gz
+*.exe
