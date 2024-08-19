@@ -3,6 +3,7 @@
 ## Installation
 - Use `Arch Linux` + `KDE` + `Brave Browser` + `Alacritty`.
 - `Brave` cannot play sound. Try `floorp`
+
 ### Some necessary packages in Arch Linux
 Check [pacman-arch-linux](pacman-arch-linux.md):
 
@@ -21,7 +22,7 @@ libva-mesa-driver # for HP Elitebook G9
 # Login management
 sddm
 sddm-kcm # For KDE
- 
+
 # Multimedia
 ffmpeg
 pipewire
@@ -66,7 +67,7 @@ Uncomment the `Experimental = true` line in the configuration:
 sudo vim /etc/bluetooth/main.conf
 #Enables D-Bus experimental interfaces
 # Possible values: true or false
-Experimental = true 
+Experimental = true
 
 # Then restart the bluetooth.service:
 

