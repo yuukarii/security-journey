@@ -15,5 +15,4 @@ set -g mouse on
 
 set -g base-index 1
 setw -g pane-base-index 1
->>>>>>> 615a1f3 (Move to Arch Linux)
 ```
