@@ -18,6 +18,11 @@ makepkg -si
 mesa
 mesa-utils
 libva-mesa-driver # for HP Elitebook G9
+amdgpu_top
+
+# System
+iw
+lm_sensors
 
 # Login management
 sddm
@@ -42,6 +47,8 @@ code
 code-features
 code-marketplace
 
+alacritty
+
 # CLI Tools
 starship
 
@@ -50,13 +57,6 @@ auto-cpufreq # Install from source
 
 # Widget KDE
 # Thermal Monitor from olib
-
-###################
-# FOR HYPRLAND
-###################
-
-hyprland
-alacritty
 ```
 
 ## Fix some issues
@@ -76,6 +76,3 @@ sudo systemctl enable --now bluetooth.service
 
 - Issue Microphone doesn't work:
 After install all the necessary packages in [Arch Linux](arch-linux.md), it should change automatically from A2DP (SBC) to HSP/HFP (mSBC). If not, you should change it manually to use your microphone.
-
-
-[install i3wm](i3wm-arch.md)
